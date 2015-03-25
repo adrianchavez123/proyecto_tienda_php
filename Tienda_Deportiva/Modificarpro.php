@@ -8,6 +8,7 @@
 	require_once('clases_php/Producto.php');
 	$producto = new Producto();
 ?>
+
 <html>
 		<head>
 		<meta charset="utf-8" />	
@@ -22,6 +23,7 @@
 			
 
 			</header>
+
 <body ontouchstart="" style="background-color:#EBEBEB">
 <div  style="float: center;">
 <!-- Start css3menu.com BODY section -->
@@ -69,52 +71,107 @@
 <!-- End css3menu.com BODY section -->
 </div>
 
+<?php
+	
+	if(isset($_POST['Nombre']) and !empty($_POST["Nombre"])
+		 and !empty($_POST["codigo"])
+		 and !empty($_POST["Existencia"])
+		 and !empty($_POST["unidad"])
+		 and !empty($_POST["ubicacion"])
+		 and !empty($_POST["clasificacion"])
+		 and !empty($_POST["costo"])
+		 and !empty($_POST["PorcentajeG"])
+		  and !empty($_POST["pventa"])
+		and !empty($_POST["DemandaD"])
+		 and !empty($_POST["Tmaximo"])
+		
+		 and !empty($_POST["Inventario"])
+		and isset($_POST['enviar'])
+		and !empty($_POST['id'])
+			
+	)
+	{
+		$imagen = $producto->subir_imagen($_POST['Nombre']);
+		if($producto->modificar($_POST['id'],$_POST['codigo'],$_POST['Nombre'],$_POST['Existencia'],$_POST['unidad'],
+			$_POST['clasificacion'],$_POST['ubicacion'],"$imagen",$_POST['costo'],$_POST['PorcentajeG'],
+			$_POST['pventa'],$_POST['DemandaD'],$_POST['Tmaximo'],$_POST['Inventario']))
+		{
+			echo "<h2 class='error'>Modificado</h2>";
+			echo "<script>alert('producto modificado');</script>";
+			
+		}
+		else
+		{
+			echo "<h2 class='error'>Datos invalidos</h2>";
+		}		
+			
+	}
+	else
+	{
+		echo "<h1>Ingresa los datos</h1>";
+	}
+	
+?>
+
 
 <fieldset style="margin:auto">
-		 <legend>Modificar Productos </legend>
-	<form id="form1" name="form1" method="post">
+		 <legend>Altas Productos </legend>
+	<form id="form1" name="form1" method="post" enctype="multipart/form-data">
 	<div>
 	
-		<label for="idProducto">IdProducto para modificar</label>
-		<input type="text" name="rfc">	
+		<label for="idProducto">Nombre producto</label>
+		<select name='id'>
+  		<?php
+  			$productos = $producto->lista();
+
+  			foreach ($productos as $pro) {
+  				echo "<option  value='".$pro['id']."'>".$pro['nombre']."</option>";
+
+  			}
+  		?>
+	</select>	
 
 	</div>
 				  <div>
-		<label for="Nombre de producto">Nombre de productos</label>
-		<input type="text" name="Nombrep" id="Nombrep" /><br>
+		<label for="Nombre de producto">Nuevo Nombre de productos</label>
+		<input type="text" name="Nombre" id="Nombrep" /><br>
 		</div>
 		  <div>
-		<label for="Existencias">Existencias</label>
-		<input type="Number" name="Existencias" id="Existencias" /><br>
+		<label for="Nombre de producto">codig del producto</label>
+		<input type="text" name="codigo" id="Nombrep" /><br>
+		</div>
+		  <div>
+		<label for="Existencia">Existencias</label>
+		<input type="Number" name="Existencia" id="Existencias" /><br>
 		</div>
 		<div>
 		<label for="Unidad de Medida">Unidad de Medida</label>
-		<select>
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="mercedes">Mercedes</option>
-  <option value="audi">Audi</option>
+		<select name="unidad">
+  <option value="valor1">valor 1</option>
+  <option value="valor2">valor 2</option>
+  <option value="valor3">valor 3</option>
+  <option value="valor4">valor 4</option>
 </select>
 
 </div>
 <div>
 <label for="Clasificacion">Clasificación</label>
-		<select>
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="mercedes">Mercedes</option>
-  <option value="audi">Audi</option>
+		<select name="clasificacion">
+  <option value="clasificacion 1">clasificacion 1</option>
+  <option value="clasificacion 2">clasificacion 2</option>
+  <option value="clasificacion 3">clasificacion 3</option>
+  <option value="clasificacion 4">clasificacion 4</option>
 </select>	
 
 
 </div>
 	<div>
 <label for="Ubicacion">Ubicación</label>
-		<select>
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="mercedes">Mercedes</option>
-  <option value="audi">Audi</option>
+		<select name="ubicacion">
+  <option value="ubicacion 1">ubicacion 1</option>
+  <option value="ubicacion 2">ubicacion 2</option>
+  <option value="ubicacion 3">ubicacion 3</option>
+  <option value="ubicacion 4">ubicacion 4</option>
 </select>	
 
 
@@ -146,10 +203,7 @@
 <label for="Inventario de seguridad">Inventario de Seguridad</label>
 <input type="text" name="Inventario" id="Inventario">
 </div>
-<div>
-<label for="Punto de reorden">Punto de Reorden</label>
-<input type="text" name="PuntodeRorden" id="PuntodeReorden">
-</div>
+
 <div>
 	<input type="submit" name="enviar" id="enviar" >
 </div>
