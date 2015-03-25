@@ -1,8 +1,21 @@
+<?php
+	session_start();
+	if($_SESSION['tipo_usuario'] != 'admin')
+	{
+		header("location:index.php");
+	}
+
+	require_once('clases_php/Producto.php');
+	$producto = new Producto();
+?>
+
 <html>
 		<head>
 		<meta charset="utf-8" />	
 		<title>Pagina Principal de Tiendas Deportivas Charly  </title>
 <link rel="stylesheet" href="css/estilo.css" type="text/css">	
+<link rel="stylesheet" href="MenuGeneral2_files/css3menu1/style.css" type="text/css" /><style type="text/css">._css3m{display:none}</style>
+
 		</head>
 		<header>
 		
@@ -10,47 +23,137 @@
 			
 
 			</header>
-<body>
+<body ontouchstart="" style="background-color:#EBEBEB">
+<div  style="float: center;">
+<!-- Start css3menu.com BODY section -->
+<input type="checkbox" id="css3menu-switcher" class="c3m-switch-input">
+<ul id="css3menu1" class="topmenu">
+	<li class="switch"><label onclick="" for="css3menu-switcher"></label></li>
+	<li class="topmenu"><a href="#" style="height:16px;line-height:16px;"><span>Inventarios</span></a>
+	<ul>
+		<li class="subfirst"><a href="#"><img src="MenuGeneral2_files/css3menu1/calendar2.png" alt=""/>Orden de Compra</a></li>
+		<li><a href="#"><img src="MenuGeneral2_files/css3menu1/pencil2.png" alt=""/>Orden de Recepción</a></li>
+		<li><a href="#"><img src="MenuGeneral2_files/css3menu1/file4.png" alt=""/>Reportes</a></li>
+		<li><a href="#"><span><img src="MenuGeneral2_files/css3menu1/users.png" alt=""/>Proveedores</span></a>
+		<ul>
+			<li class="subfirst"><a href="Dardebajaproveedores.php">Baja</a></li>
+			<li><a href="Busquedaproveedor.php">Busqueda</a></li>
+			<li><a href="Modificarproveedor.php">Modificación</a></li> 
+			<li class="sublast"><a href="Altaproveedores.php">Alta</a></li>
+		</ul></li>
+		<li class="sublast"><a href="#"><span><img src="MenuGeneral2_files/css3menu1/hammer.png" alt=""/>Productos</span></a>
+		<ul>
+			<li class="subfirst"><a href="Dardebajaproductos.php">Baja</a></li>
+			<li><a href="BuscarProducto.php">Busqueda</a></li>
+			<li><a href="Modificarpro.php"><span>Modificación</span></a>
+			</li>
+			<li class="sublast"><a href="Productos.php">Alta</a></li>
+		</ul></li>
+	</ul></li>
+	<li class="topmenu"><a href="#" style="height:16px;line-height:16px;"><span>Ventas</span></a>
+	<ul>
+		<li class="subfirst"><a href="#"><span>Reportes</span></a>
+		<ul>
+			<li class="subfirst"><a href="#">Listado de Facturas</a></li>
+			<li class="sublast"><a href="#">Listado de Clientes</a></li>
+		</ul></li>
+		<li><a href="#"><img src="MenuGeneral2_files/css3menu1/tags.png" alt=""/>Ventas </a></li>
+		<li class="sublast"><a href="#"><span><img src="MenuGeneral2_files/css3menu1/users1.png" alt=""/>Clientes</span></a>
+		<ul>
+			<li class="subfirst"><a href="dardeBajaClientes.php">Baja</a></li>
+			<li><a href="BusquedaCliente.php">Busqueda</a></li>
+			<li><a href="ModificarCliente.php">Modificación</a></li>
+			<li class="sublast"><a href="AltaClientes.php">Alta</a></li>
+		</ul></li>
+	</ul></li>
+</ul><p class="_css3m"><a href="http://css3menu.com/">drop down menu html</a> by Css3Menu.com</p>
+<!-- End css3menu.com BODY section -->
+</div>
+<?php
+	
+	if(isset($_POST['Nombre']) and !empty($_POST["Nombre"])
+		 and !empty($_POST["codigo"])
+		 and !empty($_POST["Existencia"])
+		 and !empty($_POST["unidad"])
+		 and !empty($_POST["ubicacion"])
+		 and !empty($_POST["clasificacion"])
+		 and !empty($_POST["costo"])
+		 and !empty($_POST["PorcentajeG"])
+		  and !empty($_POST["pventa"])
+		and !empty($_POST["DemandaD"])
+		 and !empty($_POST["Tmaximo"])
+		
+		 and !empty($_POST["Inventario"])
+		and isset($_POST['enviar'])
+		
+			
+	)
+	{
+		$imagen = $producto->subir_imagen($_POST['Nombre']);
+		if($producto->crear($_POST['codigo'],$_POST['Nombre'],$_POST['Existencia'],$_POST['unidad'],
+			$_POST['clasificacion'],$_POST['ubicacion'],"$imagen",$_POST['costo'],$_POST['PorcentajeG'],
+			$_POST['pventa'],$_POST['DemandaD'],$_POST['Tmaximo'],$_POST['Inventario']))
+		{
+			echo "<h2 class='error'>Guardado</h2>";
+			echo "<script>alert('producto guardado');</script>";
+			
+		}
+		else
+		{
+			echo "<h2 class='error'>Datos invalidos</h2>";
+		}		
+			
+	}
+	else
+	{
+		echo "<h1>Ingresa los datos</h1>";
+	}
+	
+?>
 
 <fieldset style="margin:auto">
 		 <legend>Altas Productos </legend>
-	<form id="form1" name="form1" method="post">
-				  <div>
+	<form id="form1" name="form1" method="post" enctype="multipart/form-data">
+		  <div>
 		<label for="Nombre de producto">Nombre de productos</label>
-		<input type="text" name="Nombrep" id="Nombrep" /><br>
+		<input type="text" name="Nombre" id="Nombrep" /><br>
+		</div>
+				  <div>
+		<label for="Nombre de producto">Codigo del producto</label>
+		<input type="text" name="codigo" id="Nombrep" /><br>
 		</div>
 		  <div>
-		<label for="Existencias">Existencias</label>
-		<input type="Number" name="Existencias" id="Existencias" /><br>
+		<label for="Existencias">Existencia</label>
+		<input type="Number" name="Existencia" id="Existencia" /><br>
 		</div>
 		<div>
 		<label for="Unidad de Medida">Unidad de Medida</label>
-		<select>
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="mercedes">Mercedes</option>
-  <option value="audi">Audi</option>
+		<select name="unidad">
+  <option value="valor1">valor 1</option>
+  <option value="valor2">valor 2</option>
+  <option value="valor3">valor 3</option>
+  <option value="valor4">valor 4</option>
 </select>
 
 </div>
 <div>
 <label for="Clasificacion">Clasificación</label>
-		<select>
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="mercedes">Mercedes</option>
-  <option value="audi">Audi</option>
+		<select name="clasificacion">
+  <option value="clasificacion 1">clasificacion 1</option>
+  <option value="clasificacion 2">clasificacion 2</option>
+  <option value="clasificacion 3">clasificacion 3</option>
+  <option value="clasificacion 4">clasificacion 4</option>
 </select>	
 
 
 </div>
 	<div>
 <label for="Ubicacion">Ubicación</label>
-		<select>
-  <option value="volvo">Volvo</option>
-  <option value="saab">Saab</option>
-  <option value="mercedes">Mercedes</option>
-  <option value="audi">Audi</option>
+		<select name="ubicacion">
+  <option value="ubicacion 1">ubicacion 1</option>
+  <option value="ubicacion 2">ubicacion 2</option>
+  <option value="ubicacion 3">ubicacion 3</option>
+  <option value="ubicacion 4">ubicacion 4</option>
 </select>	
 
 
@@ -82,10 +185,7 @@
 <label for="Inventario de seguridad">Inventario de Seguridad</label>
 <input type="text" name="Inventario" id="Inventario">
 </div>
-<div>
-<label for="Punto de reorden">Punto de Reorden</label>
-<input type="text" name="PuntodeRorden" id="PuntodeReorden">
-</div>
+
 <div>
 	<input type="submit" name="enviar" id="enviar" >
 </div>
