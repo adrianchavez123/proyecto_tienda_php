@@ -40,10 +40,11 @@ class Producto
 		$clasificacion,$ubicacion,$imagen,$costo_compra,$porcentaje_ganancia,
 		$precio_venta,$demanda_diaria,$tiempo_de_entrega,$cantidad_productos_minimos)
 	{
+		$reorden =$this->reorden($demanda_diaria,$tiempo_de_entrega,$cantidad_productos_minimos);
 		$sentencia = "insert into productos values(null,'$codigo','$nombre','$existencia','$unidad_de_medida',
 			'$clasificacion','$ubicacion','$imagen','$costo_compra','$porcentaje_ganancia',
 			'$precio_venta','$demanda_diaria','$tiempo_de_entrega','$cantidad_productos_minimos',
-			'activo')";
+			'$reorden','activo')";
 	
 		
 		if(mysql_query($sentencia))
@@ -57,10 +58,12 @@ class Producto
 		$clasificacion,$ubicacion,$imagen,$costo_compra,$porcentaje_ganancia,
 		$precio_venta,$demanda_diaria,$tiempo_de_entrega,$cantidad_productos_minimos)
 	{
+		$reorden =$this->reorden($demanda_diaria,$tiempo_de_entrega,$cantidad_productos_minimos);
+		
 		$sentencia = "update productos set codigo ='$codigo', nombre ='$nombre',existencia= '$existencia',unidad_de_medida='$unidad_de_medida',
 		clasificacion= '$clasificacion',ubicacion= '$ubicacion',imagen = '$imagen',costo_compra= '$costo_compra',porcentaje_ganancia= '$porcentaje_ganancia',
 		precio_venta='$precio_venta',demanda_diaria='$demanda_diaria',tiempo_de_entrega= '$tiempo_de_entrega',cantidad_productos_minimos='$cantidad_productos_minimos'
-		where id = '$id'";
+		,punto_reorden='$reorden' where id = '$id'";
 		
 		if(mysql_query($sentencia))
 		{
@@ -100,6 +103,12 @@ class Producto
 		
 		return $ruta;
 	}	
+
+
+	public function reorden($demanda_diaria,$tiempo_de_entrega,$cantidad_productos_minimos)
+	{
+		return ($demanda_diaria*$tiempo_de_entrega)/$cantidad_productos_minimos;
+	}
 }
 
 ?>
