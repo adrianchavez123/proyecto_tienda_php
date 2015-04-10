@@ -6,7 +6,12 @@
 	}
 
 	require_once('clases_php/Producto.php');
+	require_once('clases_php/Proveedor.php');
+	require_once('clases_php/Compra.php');
+	
 	$producto = new Producto();
+	$proveedor = new Proveedor();
+	$compra = new Compra();
 ?>
 
 <html>
@@ -23,7 +28,6 @@
 			
 
 			</header>
-
 <body ontouchstart="" style="background-color:#EBEBEB">
 <div  style="float: center;">
 <!-- Start css3menu.com BODY section -->
@@ -70,41 +74,28 @@
 </ul><p class="_css3m"><a href="http://css3menu.com/">drop down menu html</a> by Css3Menu.com</p>
 <!-- End css3menu.com BODY section -->
 </div>
-
 <?php
 	
-	if(isset($_POST['Nombre']) and !empty($_POST["Nombre"])
-		 and !empty($_POST["codigo"])
-		 and !empty($_POST["Existencia"])
-		 and !empty($_POST["unidad"])
-		 and !empty($_POST["ubicacion"])
-		 and !empty($_POST["clasificacion"])
-		 and !empty($_POST["costo"])
-		 and !empty($_POST["PorcentajeG"])
-		  and !empty($_POST["pventa"])
-		and !empty($_POST["DemandaD"])
-		 and !empty($_POST["Tmaximo"])
-		
-		 and !empty($_POST["Inventario"])
-		and isset($_POST['enviar'])
-		and !empty($_POST['id'])
-			
-	)
+	if(isset($_POST['enviar']))
 	{
-		$imagen = $producto->subir_imagen($_POST['Nombre']);
-		if($producto->modificar($_POST['id'],$_POST['codigo'],$_POST['Nombre'],$_POST['Existencia'],$_POST['unidad'],
-			$_POST['clasificacion'],$_POST['ubicacion'],"$imagen",$_POST['costo'],$_POST['PorcentajeG'],
-			$_POST['pventa'],$_POST['DemandaD'],$_POST['Tmaximo'],$_POST['Inventario']))
+		$productos = [];
+		$cantidades = [];
+		foreach($_POST['cantidad'] as $producto_id => $cantidad)
 		{
-			echo "<h2 class='error'>Modificado</h2>";
-			echo "<script>alert('producto modificado');</script>";
+
+			if($cantidad != null or $cantidad != ''){
+				$productos[]= $producto_id;
+				$cantidades[] = $cantidad;
+			}
 			
 		}
-		else
-		{
-			echo "<h2 class='error'>Datos invalidos</h2>";
-		}		
-			
+
+		$realizar = $compra->comprar($_POST['proveedor_id'],$_POST['unidad'],$productos,$cantidades);
+
+		echo "<h2 class='error'>Compra realizada</h2>";
+			echo "<script>alert('compra realizada');</script>";
+					
+		
 	}
 	else
 	{
@@ -113,96 +104,71 @@
 	
 ?>
 
-
 <fieldset style="margin:auto">
-		 <legend>Altas Productos </legend>
+		 <legend>Orden Compra </legend>
 	<form id="form1" name="form1" method="post" enctype="multipart/form-data">
-	<div>
-	
-		<label for="idProducto">Nombre producto</label>
-		<select name='id'>
-  		<?php
-  			$productos = $producto->lista();
+		  <div>
+	<label for="DardebajaProve">Selecciona un proveedor</label>
+	<select name='proveedor_id'>
+		<?php
+			$proveedores =$proveedor->lista();
+			foreach ($proveedores as  $pro) {
+				
+				echo "<option  value='".$pro['id']."'>".$pro['nombre_razon_social']."</option>";
 
-  			foreach ($productos as $pro) {
-  				echo "<option  value='".$pro['id']."'>".$pro['nombre']."</option>";
-
-  			}
-  		?>
+							}
+		?>
 	</select>	
-
 	</div>
-				  <div>
-		<label for="Nombre de producto">Nuevo Nombre de productos</label>
-		<input type="text" name="Nombre" id="Nombrep" /><br>
-		</div>
-		  <div>
-		<label for="Nombre de producto">codig del producto</label>
-		<input type="text" name="codigo" id="Nombrep" /><br>
-		</div>
-		  <div>
-		<label for="Existencia">Existencias</label>
-		<input type="Number" name="Existencia" id="Existencias" /><br>
-		</div>
+
 		<div>
-		<label for="Unidad de Medida">Unidad de Medida</label>
+		<label for="Unidad de Medida">Lugar de entrega</label>
 		<select name="unidad">
-  <option value="valor1">valor 1</option>
-  <option value="valor2">valor 2</option>
-  <option value="valor3">valor 3</option>
-  <option value="valor4">valor 4</option>
+  <option value="lugar1">lugar 1</option>
+  <option value="lugar2">lugar 2</option>
+  <option value="lugar3">lugar 3</option>
+  <option value="lugar4">lugar 4</option>
 </select>
 
 </div>
-<div>
-<label for="Clasificacion">Clasificación</label>
-		<select name="clasificacion">
-  <option value="clasificacion 1">clasificacion 1</option>
-  <option value="clasificacion 2">clasificacion 2</option>
-  <option value="clasificacion 3">clasificacion 3</option>
-  <option value="clasificacion 4">clasificacion 4</option>
-</select>	
+	<table>
+		<thead>
+			<th>Producto</th>
+			<th>codigo</th>
+			<th>existencia</th>
+			<th>unidad_de_medida</th>
+			<th>clasificacion</th>
+			<th>costo_compra</th>
+			<th>imagen</th>
+			<th>cantidad</th>
+			<th>comprar</th>
+	
+		</thead>
+		
+		<tbody>
+	<?php
+		$productos =$producto->lista();
 
-
-</div>
-	<div>
-<label for="Ubicacion">Ubicación</label>
-		<select name="ubicacion">
-  <option value="ubicacion 1">ubicacion 1</option>
-  <option value="ubicacion 2">ubicacion 2</option>
-  <option value="ubicacion 3">ubicacion 3</option>
-  <option value="ubicacion 4">ubicacion 4</option>
-</select>	
-
-
-</div>
+		foreach ($productos as $producto) {
+				
+				echo "<tr>
+						<td>".$producto['nombre']."</td>
+						<td>".$producto['codigo']."</td>
+						<td>".$producto['existencia']."</td>
+						<td>".$producto['unidad_de_medida']."</td>
+						<td>".$producto['clasificacion']."</td>
+						<td>".$producto['costo_compra']."</td>
+						<td><img width='50px' heigth='50px' src='".$producto['imagen']."'></td>
+						<td><input type='text' name='cantidad[".$producto['id']."]'></td>
+						<td><input type='checkbox' name='comprar[".$producto['id']."]' value='1'></td>
+						
+					</tr>";
+				}
+			echo "</table>";
+	?>
+		</tbody>
+	</table>	
 <div>
-<label for="Imagen">Imagen</label>
-<input type="file" name="imagen" id="imagen">
-</div>	
-<div>
-<label for="Costo de compra">Costo</label>
-<input type="text" name="costo" id="costo">
-</div>
-<div>
-<label for="PorcentajeG">Porcentaje Ganancia</label>
-<input type="text" name="PorcentajeG" id="PorcentajeG">
-</div>
-<div><label for="Precio de Venta">Precio de Venta</label>
-<input type="text" name="pventa" id="venta">
-</div>
-<div>
-<label for="Demanda Diaria Aproximada">Demanda Diaria</label>
-<input type="text" name="DemandaD" id="DemandaD">
-</div>
-<div>
-<label for="Tiempo de Entrega Maximo">Tiempo de entrega Maximo</label>
-<input type="text" name="Tmaximo" id="Tmaximo">
-</div>
-<div>
-<label for="Inventario de seguridad">Inventario de Seguridad</label>
-<input type="text" name="Inventario" id="Inventario">
-</div>
 
 <div>
 	<input type="submit" name="enviar" id="enviar" >

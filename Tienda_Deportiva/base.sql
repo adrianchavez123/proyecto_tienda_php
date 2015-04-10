@@ -63,6 +63,7 @@ create table detalle_compra
 	id int not null auto_increment,
 	numero_orden int not null,
 	producto_id int not null,
+	cantidad int not null,
 	foreign key (producto_id) references productos(id)
 	on update cascade
 	on delete restrict,

@@ -25,7 +25,7 @@ class Producto
 
 	public function buscar($codigo)
 	{
-		/*checar*/
+		
 		$sentencia = "select * from productos where activo='activo' and codigo like '%$codigo%'";
 		$reg = mysql_query($sentencia);
 		$lista = array();
@@ -109,6 +109,20 @@ class Producto
 	{
 		return ($demanda_diaria*$tiempo_de_entrega)/$cantidad_productos_minimos;
 	}
+
+
+	public function cantidad_producto($id)
+	{
+		$sentencia = "select * from productos where activo='activo' and id='$id'";
+		$reg = mysql_query($sentencia);
+		$cantidad = 0;
+		while ($lista = mysql_fetch_array($reg)) {
+    		$cantidad = $lista['existencia'];
+    	}
+    	return $cantidad;
+	}
+
+
 }
 
 ?>
