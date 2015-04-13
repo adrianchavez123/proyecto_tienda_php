@@ -122,6 +122,26 @@ class Producto
     	return $cantidad;
 	}
 
+	public function comprobarExistencia($productos_lista,$cantidades_lista)
+	{
+		
+		for ($i = 0; $i < sizeof($productos_lista); $i++) {
+			
+			$sentencia = "select * from productos where activo='activo' and id='".$productos_lista[$i]."'";
+			$reg = mysql_query($sentencia);
+			$cantidad = 0;
+			while ($lista = mysql_fetch_array($reg)) {
+	    		$cantidad = $lista['existencia'];
+	    		if($cantidad < $cantidades_lista[$i])
+	    		{
+	    			return false;
+	    		}
+	    	}
+		}
+
+		return true;
+	}
+
 
 }
 

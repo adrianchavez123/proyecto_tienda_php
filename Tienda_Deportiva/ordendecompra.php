@@ -20,7 +20,6 @@
 		<title>Pagina Principal de Tiendas Deportivas Charly  </title>
 <link rel="stylesheet" href="css/estilo.css" type="text/css">	
 <link rel="stylesheet" href="MenuGeneral2_files/css3menu1/style.css" type="text/css" /><style type="text/css">._css3m{display:none}</style>
-
 		</head>
 		<header>
 		
@@ -92,9 +91,15 @@
 
 		$realizar = $compra->comprar($_POST['proveedor_id'],$_POST['unidad'],$productos,$cantidades);
 
-		echo "<h2 class='error'>Compra realizada</h2>";
+		if($realizar)
+		{
+			echo "<h2 class='error'>Compra realizada</h2>";
 			echo "<script>alert('compra realizada');</script>";
-					
+		}
+		else{
+			echo "<h2 class='error'>Ocurrio un error puede que no haya esa cantidad de productos en existencia</h2>";
+			echo "<script>alert('Ocurrio un error puede que no haya esa cantidad de productos en existencia');</script>";
+		}			
 		
 	}
 	else
@@ -159,8 +164,8 @@
 						<td>".$producto['clasificacion']."</td>
 						<td>".$producto['costo_compra']."</td>
 						<td><img width='50px' heigth='50px' src='".$producto['imagen']."'></td>
-						<td><input type='text' name='cantidad[".$producto['id']."]'></td>
-						<td><input type='checkbox' name='comprar[".$producto['id']."]' value='1'></td>
+						<td><input class='texto' type='text' name='cantidad[".$producto['id']."]'></td>
+						<td><input class='check' type='checkbox' name='comprar[".$producto['id']."]' value='1'></td>
 						
 					</tr>";
 				}
@@ -192,6 +197,7 @@
 	
 	</div>			
 </footer>
-
+<script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="script.js"></script>
 </body>
 </html>
