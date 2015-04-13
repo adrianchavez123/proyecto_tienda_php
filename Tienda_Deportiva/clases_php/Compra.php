@@ -17,8 +17,8 @@ class Compra
 	public function comprar($proveedor_id,$unidad,$productos_lista,$cantidades_lista)
 	{
 		$producto = new  Producto();
-		$realizarCompra =$producto->comprobarExistencia($productos_lista,$cantidades_lista);
-		
+		//$realizarCompra =$producto->comprobarExistencia($productos_lista,$cantidades_lista);
+		$realizarCompra = true;
 		if($realizarCompra)
 		{
 		$sentencia = "insert into compras values(null,$proveedor_id,now())";
@@ -33,7 +33,7 @@ class Compra
 						$cantidades_lista[$i].")";
 					
 					mysql_query($sent);
-					$this->reducir_lista_productos($productos_lista[$i],$cantidades_lista[$i]);
+					//$this->reducir_lista_productos($productos_lista[$i],$cantidades_lista[$i]);
 				}
 			}
 			return true;
@@ -43,17 +43,21 @@ class Compra
 	
 	}
 
-	public function reducir_lista_productos($producto_id,$cantidad)
+	public function aumentar_lista_productos($producto_id,$cantidad)
 	{
 		
-		$producto = new Producto();
-		$cant = $producto->cantidad_producto($producto_id);
-		$c = $cant - $cantidad;
+		
+		foreach ($producto_id as $prod) {
+			
+			
+			$cant = $producto->cantidad_producto($prod);
+			$c = $cant + $cantidad;
 
-		$sentencia = "update productos set existencia='$c' where id= '$producto_id'";
-		//echo $sentencia."<br>";
-		$x = mysql_query($sentencia);
-		return $x;
+			$sentencia = "update productos set existencia='$c' where id= '$producto_id'";
+			//echo $sentencia."<br>";
+			$x = mysql_query($sentencia);
+		}
+		
 	}
 
 
@@ -65,6 +69,17 @@ class Compra
 			$id = $lista['numero_orden'];
     	}
 		return $id;
+	}
+
+
+	public function compras_sin_recibir()
+	{
+		$sentencia = "select * from compras where entregado = 0";
+		$reg = mysql_query($sentencia);
+		$lista = array();
+		while ($lista[] = mysql_fetch_array($reg)) {
+    	}
+		return $lista;
 	}
 
 }
