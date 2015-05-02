@@ -21,8 +21,9 @@ class Compra
 		$realizarCompra = true;
 		if($realizarCompra)
 		{
-		$sentencia = "insert into compras values(null,$proveedor_id,now())";
 
+		$sentencia = "insert into compras values(null,$proveedor_id,now(),0)";
+		echo "$sentencia<br><br>";
 			if(mysql_query($sentencia))
 			{
 				
@@ -31,12 +32,16 @@ class Compra
 					
 					$sent = "insert into detalle_compra values (null,$orden,".$productos_lista[$i].",".
 						$cantidades_lista[$i].")";
-					
+					echo "$sent<br><br>";
 					mysql_query($sent);
 					//$this->reducir_lista_productos($productos_lista[$i],$cantidades_lista[$i]);
 				}
+				return true;
+			}else
+			{
+				return false;
 			}
-			return true;
+			
 		}
 
 		return false;	
@@ -46,14 +51,14 @@ class Compra
 	public function aumentar_lista_productos($producto_id,$cantidad)
 	{
 		
-		
-		foreach ($producto_id as $prod) {
+		for($i = 0; $i< sizeof($producto_id); $i++) {
 			
-			
-			$cant = $producto->cantidad_producto($prod);
-			$c = $cant + $cantidad;
+			$producto = new Producto();
+			$cant = $producto->cantidad_producto($producto_id[$i]);
+			//echo "$cant   +  $cantidad[$i]";
+			$c = $cant + $cantidad[$i];
 
-			$sentencia = "update productos set existencia='$c' where id= '$producto_id'";
+			$sentencia = "update productos set existencia='$c' where id= '$producto_id[$i]'";
 			//echo $sentencia."<br>";
 			$x = mysql_query($sentencia);
 		}

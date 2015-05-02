@@ -34,15 +34,9 @@ class Proveedor
 
 	public function crear($nombre,$correo,$usuario,$pass)
 	{
-		id int not null auto_increment,
-	nombre  varchar(200) not null,
-	tipo_usuario varchar(50) not null,
-	correo varchar(200) not null,
-	usuario varchar(50) not null,
-	pass varchar(200) not null,
-	unique key (usuario),
+		
 		$sentencia = "insert into usuarios values(null,
-			'$nombre','cliente','$rfc','$domicilio','$ciudad','activo')";
+			'$nombre','cliente','$correo','$usuario','$pass')";
 		
 		if(mysql_query($sentencia))
 		{
@@ -51,7 +45,7 @@ class Proveedor
 		return false;
 	}
 
-	public function modificar($id,$nombre,$rfc,$domicilio,$ciudad)
+	public function modificar($id,$nombre,$correo,$pass)
 	{
 		$sentencia = "update proveedores set nombre_razon_social ='$nombre',
 		rfc ='$rfc', domicilio ='$domicilio', ciudad ='$ciudad'

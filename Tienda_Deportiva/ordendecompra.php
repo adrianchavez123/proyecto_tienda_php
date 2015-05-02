@@ -36,8 +36,15 @@
 	<li class="topmenu"><a href="#" style="height:16px;line-height:16px;"><span>Inventarios</span></a>
 	<ul>
 		<li class="subfirst"><a href="ordendecompra.php"><img src="MenuGeneral2_files/css3menu1/calendar2.png" alt=""/>Orden de Compra</a></li>
-		<li><a href="#"><img src="MenuGeneral2_files/css3menu1/pencil2.png" alt=""/>Orden de Recepción</a></li>
-		<li><a href="#"><img src="MenuGeneral2_files/css3menu1/file4.png" alt=""/>Reportes</a></li>
+		<li><a href="ordenrecepcion.php"><img src="MenuGeneral2_files/css3menu1/pencil2.png" alt=""/>Orden de Recepción</a></li>
+		<li class="sublast"><a href="#"><span><img src="MenuGeneral2_files/css3menu1/hammer.png" alt=""/>Reportes</span></a>
+		<ul>
+			<li class="subfirst"><a href="reporteListaOrdenes.php">Reporte lista ordenes</a></li>
+			<li><a href="reporteListaPedidos.php">Reporte lista pedidos</a></li>
+			<li><a href="reporteProductos.php">Reporte productos</a></li> 
+			<li class="sublast"><a href="reporteProveedor.php">Reporte Proveedores</a></li>
+		</ul>
+		</li>
 		<li><a href="#"><span><img src="MenuGeneral2_files/css3menu1/users.png" alt=""/>Proveedores</span></a>
 		<ul>
 			<li class="subfirst"><a href="Dardebajaproveedores.php">Baja</a></li>

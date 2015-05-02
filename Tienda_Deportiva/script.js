@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-	$('.texto').hide();
+	//$('.texto').hide();
 	$('.check').click(function(e)
     {
     	console.log("x");
@@ -14,8 +14,8 @@ $(document).ready(function()
         }
         else
         {
-        	$(this).parents('tr').find('input[type="text"]').hide();
-        	$(this).parents('tr').find('input[type="text"]').val(""); 
+        	//$(this).parents('tr').find('input[type="text"]').hide();
+        	//$(this).parents('tr').find('input[type="text"]').val(""); 
           	 
         }
     });

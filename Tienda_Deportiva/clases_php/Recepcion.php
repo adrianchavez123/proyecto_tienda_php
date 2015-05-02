@@ -34,7 +34,7 @@ class Recepcion
 		$sentencia2 = "select * from detalle_compra where numero_orden=$compra_id";
 		$producto_id = array();
 		$cantidad = array();
-
+		$reg = mysql_query($sentencia2);
 		while ($lista = mysql_fetch_array($reg)) {
 			$producto_id[] = $lista['producto_id'];
 			$cantidad[] = $lista['cantidad'];

@@ -14,9 +14,9 @@ class Reporte
 		$this->conexion = $this->con->conectar(); 
 	}
 
-	public function balance_de_almacen()
+	public function balance_de_almacen($fecha)
 	{
-
+		
 	}
 
 	public function lista_pedidos($fecha)
@@ -28,6 +28,7 @@ class Reporte
 				join productos on productos.id = detalle_compra.producto_id
 				where  compras.fecha_pedido='$fecha'";
 
+		//echo "$sentencia<br><br>";
 		$reg = mysql_query($sentencia);
 		$lista = array();
 		while ($lista[] = mysql_fetch_array($reg)) {
@@ -42,7 +43,7 @@ class Reporte
 				 join compras on detalle_compra.numero_orden = compras.numero_orden 
 				join proveedores on compras.proveedor_id = proveedores.id 
 				join productos on productos.id = detalle_compra.producto_id
-				where  compras.recibido=0";
+				where  compras.entregado=0 order by detalle_compra.numero_orden";
 
 		$reg = mysql_query($sentencia);
 		$lista = array();
